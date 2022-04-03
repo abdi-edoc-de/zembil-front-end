@@ -8,6 +8,7 @@ function App() {
   return (
     <div className="App">
       {/* <Authorize/> */}
+      "hi"
       {user?"home":<Authorize/>}
     </div>
   );
