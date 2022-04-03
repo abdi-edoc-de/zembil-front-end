@@ -1,8 +1,21 @@
 import React from "react";
-
+import {useForm} from 'react-hook-form'
+import {loginSchema} from '../Validation/loginValidation';
+import { yupResolver } from "@hookform/resolvers/yup";
+import {login} from '../../../store/user'
+import { useDispatch } from "react-redux";
 function LoginForm() {
+    const dispatch = useDispatch()
+    const {register, handleSubmit,formState} = useForm({
+      resolver:yupResolver(loginSchema)
+    })
+
+  const submit = (data) =>{
+    dispatch(login(data.email,data.password))
+    console.log(data, 'mannn')
+  }
   return (
-    <form className="login__form" id="loginForm">
+    <form onSubmit={handleSubmit(submit)} className="login__form" id="loginForm">
       {/* <!-- Form Title --> */}
       <h1 className="form__title">Sign In!</h1>
       {/* <!-- inputs Groups --> */}
@@ -10,12 +23,14 @@ function LoginForm() {
         <label className="field">
           <input
             type="text"
-            name="username"
-            placeholder="Username"
-            id="logInUsername"
+            name="email"
+            placeholder="email"
+            id="email"
+            {...register('email')}
             // v-model.trim="$v.loginName.$model"
           />
         </label>
+        <p>{formState.errors.email?.message}</p>
         <span className="input__icon">
           <i className="bx bx-user"></i>
         </span>
@@ -31,10 +46,14 @@ function LoginForm() {
             type="password"
             name="password"
             placeholder="Password"
-            id="loginPassword"
+            id="password"
+            {...register('password')}
+
             // v-model.trim="$v.loginPassword.$model"
           />
         </label>
+        <p>{formState.errors.password?.message} </p>
+
         <span className="input__icon">
           <i className="bx bx-lock"></i>
         </span>
@@ -51,7 +70,7 @@ function LoginForm() {
       </div>
       <div className="form__actions"></div>
       {/* <!-- Login Button --> */}
-      <button type="submit" className="submit-button" id="loginSubmitBtn">
+      <button  className="submit-button" id="loginSubmitBtn">
         Sign in
       </button>
       {/* <v-btn color="accent" plain
