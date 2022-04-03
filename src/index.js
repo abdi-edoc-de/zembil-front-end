@@ -3,7 +3,11 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import configureStore from './store/configureStore'
+import {login} from './store/user';
 
+const store = configureStore()
+store.dispatch(login('papi', 'pass'))
 ReactDOM.render(
   <React.StrictMode>
     <App />
