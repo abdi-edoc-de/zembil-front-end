@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createSelector } from "@reduxjs/toolkit";
 import * as action from "./api"
 const slice = createSlice({
     name:'user',
@@ -19,14 +19,19 @@ const slice = createSlice({
         },
         logoutRequested:(user, action) =>{
             user.value = null
+        },
+        userAdded: (user, action) => {
+            user.value = action.payload
+            user.loading = false
         }
+        
 
 
     }
 })
 
 
-const {loginRequested, requested, requestFailed, logoutRequested} = slice.actions
+const {loginRequested, requested, requestFailed, logoutRequested,userAdded} = slice.actions
 export default slice.reducer
 
 const url ='/login'
@@ -44,3 +49,27 @@ export const login = (userName, password) => (dispatch, getState) => {
 
     }))
 }
+
+export const regiseter = ({userName,fullName, email, phone, password}) => (dispatch, getState) =>{
+    dispatch(
+        action.apiCallBegan({
+            url,
+            onStart:requested.type,
+            onSuccess: userAdded.type,
+            onFailed:requestFailed.type,
+            data:{
+                userName,
+                fullName,
+                email,
+                phone,
+                password
+            },
+            method:"post"
+
+        })
+    )
+}
+export const getUser = createSelector(
+    state => state.entities.user.value,
+    user => user
+)

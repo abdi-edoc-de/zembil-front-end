@@ -1,5 +1,5 @@
 import {combineReducers} from '@reduxjs/toolkit'
-import entites from './entites'
+import entities from './entites'
 export default combineReducers({
-    entites
+    entities
 })
